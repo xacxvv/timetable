@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<a class="back-link" href="{{ url_for('index') }}">← Буцах</a>
+{% if mode == "teacher" %}
+<h1>{{ name }} багшийн 7 хоногийн хуваарь</h1>
+{% else %}
+<h1>{{ name }} ангийн 7 хоногийн хуваарь</h1>
+{% endif %}
+
+<div class="timetable-container">
+    <table class="timetable">
+        {{ header_html | safe }}
+        {{ row_html | safe }}
+    </table>
+</div>
+{% endblock %}
