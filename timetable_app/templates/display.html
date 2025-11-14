@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% set body_class = "display-page" %}
+
+{% block content %}
+<div class="display-container">
+    {% if events %}
+    <div id="event-stage" class="event-stage"></div>
+    <div id="clock" class="clock"></div>
+    {% else %}
+    <div class="no-events">Энэ долоо хоногт арга хэмжээний мэдээлэл байршуулаагүй байна.</div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+{% if events %}
+<script>
+const EVENTS = {{ events | tojson }};
+const IMAGE_DURATION = 10000; // milliseconds
+const VIDEO_MAX_DURATION = 60000; // fallback for long videos
+let currentIndex = -1;
+let timeoutHandle = null;
+
+const stage = document.getElementById('event-stage');
+const clock = document.getElementById('clock');
+
+function updateClock() {
+    const now = new Date();
+    const dateString = now.toLocaleDateString('mn-MN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const timeString = now.toLocaleTimeString('mn-MN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    clock.textContent = `${dateString} • ${timeString}`;
+}
+
+function clearStage() {
+    stage.innerHTML = '';
+    if (timeoutHandle) {
+        clearTimeout(timeoutHandle);
+        timeoutHandle = null;
+    }
+}
+
+function scheduleNext(delay) {
+    timeoutHandle = setTimeout(showNextEvent, delay);
+}
+
+function showEvent(index) {
+    const event = EVENTS[index];
+    clearStage();
+
+    if (!event) {
+        scheduleNext(IMAGE_DURATION);
+        return;
+    }
+
+    if (event.type === 'image') {
+        const img = document.createElement('img');
+        img.src = event.url;
+        img.alt = 'Арга хэмжээний зураг';
+        img.className = 'display-media';
+        stage.appendChild(img);
+        scheduleNext(IMAGE_DURATION);
+    } else if (event.type === 'video') {
+        const video = document.createElement('video');
+        video.src = event.url;
+        video.className = 'display-media';
+        video.autoplay = true;
+        video.muted = true;
+        video.playsInline = true;
+        video.controls = false;
+        video.onended = showNextEvent;
+        stage.appendChild(video);
+        timeoutHandle = setTimeout(showNextEvent, VIDEO_MAX_DURATION);
+    } else {
+        scheduleNext(IMAGE_DURATION);
+    }
+}
+
+function showNextEvent() {
+    currentIndex = (currentIndex + 1) % EVENTS.length;
+    showEvent(currentIndex);
+}
+
+updateClock();
+setInterval(updateClock, 1000);
+showNextEvent();
+</script>
+{% endif %}
+{% endblock %}
