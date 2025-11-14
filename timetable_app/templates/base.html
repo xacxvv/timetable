@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title or "ДХИС - Хичээлийн хуваарь" }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="{{ body_class | default('') }}">
+    <header class="site-header">
+        <div class="header-inner">
+            <img class="logo" src="{{ url_for('static', filename='logo.png') }}" alt="ДХИС лого">
+            <div class="header-text">
+                <div class="header-title">Дотоод хэргийн их сургууль</div>
+                <div class="header-subtitle">Хичээлийн 7 хоногийн хуваарийн портал</div>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="site-footer">
+        © 2025 ДХИС • Дотоод сүлжээний хэрэгцээнд
+    </footer>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>
