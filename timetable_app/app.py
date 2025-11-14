@@ -5,7 +5,7 @@ from typing import Dict, List
 
 from flask import Flask, abort, render_template, request
 
-from parsers import ParsedTimetable, parse_timetable
+from parsers import parse_timetable
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
@@ -15,25 +15,11 @@ app = Flask(__name__)
 
 
 # Parse timetable data once at startup
-teachers_data: ParsedTimetable = parse_timetable(DATA_DIR / "Teachers.html")
-classes_data: ParsedTimetable = parse_timetable(DATA_DIR / "Classes.html")
+teachers_header_html, teacher_rows, teacher_index = parse_timetable(DATA_DIR / "Teachers.html")
+classes_header_html, class_rows, class_index = parse_timetable(DATA_DIR / "Classes.html")
 
-teacher_names: List[str] = sorted(row.name for row in teachers_data.rows)
-class_names: List[str] = sorted(row.name for row in classes_data.rows)
-
-teacher_index: Dict[str, str] = teachers_data.html_index
-class_index: Dict[str, str] = classes_data.html_index
-
-teacher_structured: Dict[str, Dict[str, Dict[str, str]]] = teachers_data.structured_index
-class_structured: Dict[str, Dict[str, Dict[str, str]]] = classes_data.structured_index
-
-teacher_week_order: List[str] = teachers_data.week_order
-teacher_day_order: Dict[str, List[str]] = teachers_data.day_order
-teacher_period_labels: List[str] = teachers_data.period_labels
-
-class_week_order: List[str] = classes_data.week_order
-class_day_order: Dict[str, List[str]] = classes_data.day_order
-class_period_labels: List[str] = classes_data.period_labels
+teacher_names: List[str] = sorted(row["name"] for row in teacher_rows)
+class_names: List[str] = sorted(row["name"] for row in class_rows)
 
 
 def load_events(directory: Path) -> List[Dict[str, str]]:
@@ -78,15 +64,12 @@ def teacher_view():
     if not name or name not in teacher_index:
         abort(404)
 
-    structured = teacher_structured.get(name, {})
     return render_template(
         "timetable.html",
         mode="teacher",
         name=name,
-        structured=structured,
-        week_order=teacher_week_order,
-        day_order=teacher_day_order,
-        period_labels=teacher_period_labels,
+        header_html=teachers_header_html,
+        row_html=teacher_index[name],
         title=f"{name} багшийн хуваарь",
     )
 
@@ -97,15 +80,12 @@ def class_view():
     if not name or name not in class_index:
         abort(404)
 
-    structured = class_structured.get(name, {})
     return render_template(
         "timetable.html",
         mode="class",
         name=name,
-        structured=structured,
-        week_order=class_week_order,
-        day_order=class_day_order,
-        period_labels=class_period_labels,
+        header_html=classes_header_html,
+        row_html=class_index[name],
         title=f"{name} ангийн хуваарь",
     )
 

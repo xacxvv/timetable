@@ -8,37 +8,10 @@
 <h1>{{ name }} ангийн 7 хоногийн хуваарь</h1>
 {% endif %}
 
-<div class="schedule-wrapper">
-    {% for week in week_order %}
-        {% set days = day_order.get(week, []) %}
-        {% if days %}
-        <section class="week-section">
-            <h2 class="week-title">{{ week }} 7 хоног</h2>
-            <div class="timetable-container">
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th class="time-header">Цаг</th>
-                            {% for day in days %}
-                            <th>{{ day }}</th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for period in period_labels %}
-                        <tr>
-                            <th class="period-label">{{ period }}</th>
-                            {% for day in days %}
-                                {% set cell_html = structured.get(week, {}).get(day, {}).get(period, "") %}
-                                <td class="lesson-cell">{% if cell_html %}{{ cell_html | safe }}{% else %}&nbsp;{% endif %}</td>
-                            {% endfor %}
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </section>
-        {% endif %}
-    {% endfor %}
+<div class="timetable-container">
+    <table class="timetable">
+        {{ header_html | safe }}
+        {{ row_html | safe }}
+    </table>
 </div>
 {% endblock %}

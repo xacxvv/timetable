@@ -196,24 +196,6 @@ select:focus {
     font-weight: 600;
 }
 
-.schedule-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 36px;
-}
-
-.week-section {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-}
-
-.week-title {
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: var(--accent);
-}
-
 .timetable-container {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
@@ -223,51 +205,39 @@ select:focus {
     overflow-x: auto;
 }
 
-.schedule-table {
+.timetable {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.95rem;
-    min-width: 720px;
 }
 
-.schedule-table thead th {
-    background: rgba(62, 167, 255, 0.18);
-    color: var(--text-primary);
-    font-weight: 600;
-    text-align: center;
+.timetable tr:nth-child(1),
+.timetable tr:nth-child(2) {
+    background: rgba(62, 167, 255, 0.12);
 }
 
-.schedule-table th,
-.schedule-table td {
+.timetable th,
+.timetable td {
     border: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 10px 8px;
+    padding: 8px 6px;
     text-align: center;
+    min-width: 120px;
 }
 
-.schedule-table tbody th {
+.timetable td:first-child,
+.timetable th:first-child {
     position: sticky;
     left: 0;
     background: rgba(12, 22, 42, 0.95);
+    backdrop-filter: blur(8px);
     font-weight: 600;
-    text-align: left;
 }
 
-.time-header {
-    position: sticky;
-    left: 0;
-    z-index: 2;
-}
-
-.schedule-table td {
+.timetable td {
     color: var(--text-primary);
-    vertical-align: top;
 }
 
-.lesson-cell {
-    text-align: left;
-}
-
-.lesson-cell br {
+.timetable td br {
     content: "";
     display: block;
     margin-bottom: 4px;
@@ -361,8 +331,8 @@ select:focus {
         padding: 32px 18px 60px;
     }
 
-    .schedule-table td,
-    .schedule-table th {
+    .timetable td,
+    .timetable th {
         min-width: 100px;
         font-size: 0.85rem;
     }
