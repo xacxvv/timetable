@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="intro">
+    <h1>Хичээлийн 7 хоногийн хуваарь</h1>
+    <p>Та багш эсвэл анги сонгож, тухайн долоо хоногийн хичээлийн хуваарийг дэлгэрэнгүй харах боломжтой.</p>
+</section>
+
+<div class="card-grid">
+    <div class="card">
+        <h2>Багшаар харах</h2>
+        <form action="{{ url_for('teacher_view') }}" method="get" class="form-grid">
+            <label for="teacher-select">Багш:</label>
+            <select id="teacher-select" name="name" required>
+                <option value="" disabled selected>Сонгоно уу</option>
+                {% for teacher in teacher_names %}
+                <option value="{{ teacher }}">{{ teacher }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="primary-btn">Хуваарь харах</button>
+        </form>
+    </div>
+    <div class="card">
+        <h2>Ангиар харах</h2>
+        <form action="{{ url_for('class_view') }}" method="get" class="form-grid">
+            <label for="class-select">Анги:</label>
+            <select id="class-select" name="name" required>
+                <option value="" disabled selected>Сонгоно уу</option>
+                {% for class_name in class_names %}
+                <option value="{{ class_name }}">{{ class_name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="primary-btn">Хуваарь харах</button>
+        </form>
+    </div>
+</div>
+
+<div class="display-link">
+    <a class="secondary-btn" href="{{ url_for('display') }}">Дэлгэцийн горим</a>
+</div>
+{% endblock %}

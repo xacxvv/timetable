@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="error-message">
+    <h1>{{ title }}</h1>
+    <p>{{ message }}</p>
+    <a class="secondary-btn" href="{{ url_for('index') }}">Нүүр хуудас руу буцах</a>
+</div>
+{% endblock %}
